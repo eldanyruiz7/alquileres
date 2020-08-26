@@ -33,6 +33,7 @@ class Query
 	private $num_rows = 0;
 	private $affected_rows = 0;
 	private $insert_id = 0;
+	private $alterTable = FALSE;
 	/**
 	*
 	* Obtiene el tipo de query (Select, Insert, Update)
@@ -72,17 +73,19 @@ class Query
 	}
 	private function restartParam()
 	{
-		$this ->mensaje = NULL;
+		// $this ->mensaje = NULL;
 		$this ->status = 0;
 		$this ->num_rows = 0;
 		$this ->affected_rows = 0;
 		$this ->insert_id = 0;
 		$this ->data = 0;
 		$this ->types = "";
+		$this ->query = "";
 		$this ->queryFields = "";
 		$this ->queryTablesKeys = "";
 		$this ->queryForeign = "";
 		$this ->table = "";
+		$this ->alterTable = FALSE;
 	}
 	private function conectar()
 	{
@@ -147,7 +150,7 @@ class Query
 			$cont++;
 		}
 		$this ->types = $ty;
-		$this ->query = "INSERT INTO ".$this ->table." ($fieldList) VALUES ($typesList)";
+		$this ->query .= "INSERT INTO ".$this ->table." ($fieldList) VALUES ($typesList);";
 		return $this;
 	}
 	public function update($arrayValues, $ty)
@@ -287,6 +290,7 @@ class Query
 	public function execute($debug = FALSE, $return = 'arr')
 	{
 		$tipo = $this ->obtenerTipoQuery();
+		// echo "---->>".$this ->query;
 		if ($tipo == "crearTabla")
 		{
 			$this ->query .= "(".$this ->queryFields."".$this ->queryTablesKeys."".$this ->queryForeign.");";
@@ -294,11 +298,14 @@ class Query
 			if($prepare_select = self::$mysqli ->query($this ->query))
 			{
 				$table = $this->table;
-				$this ->restartParam();
 				$this ->mensaje = "Tabla <b>".$table."</b> creada con éxito";
 				if ($debug)
-					$this ->mensaje .= "<br>".$this ->query;
+				{
+					$this ->mensaje .= "<br>".$this ->query."<br>";
+					echo "<pre>".$this ->mensaje."</pre>";
+				}
 				$this ->status = 1;
+				$this ->restartParam();
 				return true;
 			}
 			else
@@ -309,72 +316,110 @@ class Query
 				return false;
 			}
 		}
-		// echo $this ->query;
-		if($prepare_select = self::$mysqli ->prepare($this ->query))
+		// echo "=====".$tipo;
+		if ($tipo == 'alterarTabla')
 		{
-			$tmp = array();
-			global $params;
-			if ($this ->types)
+			$exp_query = explode(";", $this ->query);
+			$return = TRUE;
+			foreach ($exp_query as $statement)
 			{
-				$t = $this->types;
-				@array_unshift($params, $t);
-				foreach($params as $key => $value)
-				$tmp[$key] = &$params[$key];
-				@call_user_func_array(array($prepare_select, 'bind_param'), $tmp);
+				if (strlen($statement))
+				{
+					if($prepare_select = self::$mysqli ->query($statement))
+					{
+						$this ->mensaje = "Tabla <b>{$this ->table}</b> alterada con éxito";
+						if ($debug)
+						{
+							$this ->mensaje .= "<br>".$statement;
+							echo "<pre>".$this ->mensaje."</pre>";
+						}
+						$this ->status = 1;
+					}
+					else
+					{
+						$this ->mensaje = "No se ejecutar esta acción sobre la tabla. Error al preparar los parámetros";
+						if ($debug)
+							return $this ->mensaje .= "<br>".$this->query;
+						$return = FALSE;
+					}
+				}
 			}
-			if(!$prepare_select->execute())
+			$this ->restartParam();
+			return $return;
+		}else
+		{
+			if($prepare_select = self::$mysqli ->prepare($this ->query))
 			{
-				$this ->mensaje = "No se puede ejecutar la sentencia. Error al ejecutar los parámetros";
-				if ($debug)
-					$this ->mensaje .= "<br>$query";
-				return false;
+				$tmp = array();
+				global $params;
+				if ($this ->types)
+				{
+					$t = $this->types;
+					@array_unshift($params, $t);
+					foreach($params as $key => $value)
+					$tmp[$key] = &$params[$key];
+					@call_user_func_array(array($prepare_select, 'bind_param'), $tmp);
+				}
+				if(!$prepare_select->execute())
+				{
+					$this ->mensaje = "No se puede ejecutar la sentencia. Error al ejecutar los parámetros";
+					if ($debug)
+					{
+						$this ->mensaje .= "<br>$query";
+						echo "<pre>".$this ->mensaje."</pre>";
+					}
+					return false;
+				}
+				else
+				{
+					if ($tipo == 'guardar' || $tipo == 'actualizar')
+					{
+						$this ->affected_rows = $prepare_select ->affected_rows;
+						$this ->insert_id  = self::$mysqli->insert_id;
+					}
+					elseif($tipo == 'consultar')
+					{
+						$a_data = array();
+						$res_select = $prepare_select->get_result();
+						$this ->num_rows= $res_select ->num_rows;
+						if ($return == 'arr')
+						{
+							$a_data = $res_select ->fetch_all(MYSQLI_ASSOC);
+						}
+						elseif ($return == 'obj')
+						{
+							// $user = (object)$user;
+							// echo "Num_rows: ".$this->num_rows."-";
+							if($this->num_rows() > 1)
+								$a_data = $this->to_object($res_select ->fetch_all(MYSQLI_ASSOC));
+							else
+								$a_data = $res_select ->fetch_object();
+						}
+						elseif ($return == 'obj_always')
+						{
+							$a_data = $this->to_object($res_select ->fetch_all(MYSQLI_ASSOC));
+						}
+						$this ->data = $a_data;
+					}
+					$this ->mensaje = "Sentencia realizada con éxito";
+					if ($debug)
+					{
+						$this ->mensaje .= "<br>".$this ->query;
+						echo "<pre>".$this ->mensaje."</pre>";
+					}
+					$this ->status = 1;
+					$this ->restartParam();
+					$prepare_select ->close();
+					return $this ->data;
+				}
 			}
 			else
 			{
-				$this ->restartParam();
-				if ($tipo == 'guardar' || $tipo == 'actualizar')
-				{
-					$this ->affected_rows = $prepare_select ->affected_rows;
-					$this ->insert_id  = self::$mysqli->insert_id;
-				}
-				elseif($tipo == 'consultar')
-				{
-					$a_data = array();
-					$res_select = $prepare_select->get_result();
-					$this ->num_rows= $res_select ->num_rows;
-					if ($return == 'arr')
-					{
-						$a_data = $res_select ->fetch_all(MYSQLI_ASSOC);
-					}
-					elseif ($return == 'obj')
-					{
-						// $user = (object)$user;
-						// echo "Num_rows: ".$this->num_rows."-";
-						if($this->num_rows() > 1)
-							$a_data = $this->to_object($res_select ->fetch_all(MYSQLI_ASSOC));
-						else
-							$a_data = $res_select ->fetch_object();
-					}
-					elseif ($return == 'obj_always')
-					{
-						$a_data = $this->to_object($res_select ->fetch_all(MYSQLI_ASSOC));
-					}
-					$this ->data = $a_data;
-				}
-				$this ->mensaje = "Sentencia realizada con éxito";
+				$this ->mensaje = "No se puede ejecutar la sentencia. Error al preparar los parámetros";
 				if ($debug)
-					$this ->mensaje .= "<br>".$this ->query;
-				$this ->status = 1;
-				$prepare_select ->close();
-				return $this ->data;
+					return $this ->mensaje .= "<br>".$this->query;
+				return false;
 			}
-		}
-		else
-		{
-			$this ->mensaje = "No se puede ejecutar la sentencia. Error al preparar los parámetros";
-			if ($debug)
-				return $this ->mensaje .= "<br>".$this->query;
-			return false;
 		}
 	}
 	/**
@@ -382,26 +427,8 @@ class Query
 	 */
 	public function backup($tables = "*")
 	{
-		//ENTER THE RELEVANT INFO BELOW
-    // $mysqlUserName      = "Your Username";
-    // $mysqlPassword      = "Your Password";
-    // $mysqlHostName      = "Your Host";
-    // $DbName             = "Your Database Name here";
-    // $backup_name        = "mybackup.sql";
-    // $tables             = "Your tables";
-
-   //or add 5th parameter(array) of specific tables:    array("mytable1","mytable2","mytable3") for multiple tables
-
-    // Export_Database($mysqlHostName,$mysqlUserName,$mysqlPassword,$DbName,  $tables=false, $backup_name=false );
-
-    // function Export_Database($host,$user,$pass,$name,  $tables=false, $backup_name=false )
-    // {
-    	// $this ->query()
-        // $mysqli = new mysqli($host,$user,$pass,$name);
-        // $mysqli->select_db($name);
-        // $mysqli->query("SET NAMES 'utf8'");
-        $backup_name = FALSE;
-        $this ->restartParam();
+		$backup_name = FALSE;
+		$this ->restartParam();
 		self::$mysqli->query("SET NAMES 'utf8'");
 
 		$queryTables = self::$mysqli->query('SHOW TABLES FROM '.$this->dataBase);
@@ -486,6 +513,12 @@ class Query
 		$this ->table = $table;
 		return $this;
 	}
+	public function alterTable($table)
+	{
+		$this ->alterTable = TRUE;
+		$this ->table = $table;
+		return $this;
+	}
 	public function dropTable($table, $foreignKeyChecks = 1)
 	{
 		$queryKeys = $foreignKeyChecks ? "SET FOREIGN_KEY_CHECKS=1;" : "SET FOREIGN_KEY_CHECKS=0;";
@@ -545,6 +578,14 @@ class Query
 		$this ->queryFields .= "$name VARCHAR($size) $nullable";
 		return $this;
 	}
+	public function text($name, $null = FALSE)
+	{
+		$nullable = $null ? "NULL" : "NOT NULL";
+		if (strlen($this ->queryFields))
+			$this ->queryFields .= ", ";
+		$this ->queryFields .= "{$name} TEXT {$nullable}";
+		return $this;
+	}
 	public function date($name, $null = FALSE)
 	{
 		$nullable = $null ? "NULL" : "NOT NULL";
@@ -586,10 +627,37 @@ class Query
 		$this ->queryFields .= "$name DECIMAL $digits $nullable $defaultValue";
 		return $this;
 	}
-	public function foreignKey($constraint, $field, $tableForeign, $fieldForeign)
+	public function foreignKey($constraint, $field, $tableForeign, $fieldForeign, $onDelete = "NO ACTION", $onUpdate = "NO ACTION")
 	{
-		$this ->queryForeign .= ", CONSTRAINT $constraint FOREIGN KEY ($field) REFERENCES $tableForeign ($fieldForeign)";
+		if ($this ->alterTable)
+		{
+			// if (strlen($this ->query)) {
+				$this ->query .= "ALTER TABLE {$this ->table} ADD CONSTRAINT {$constraint} FOREIGN KEY ({$field})
+								 REFERENCES {$tableForeign} ({$fieldForeign});";
+				// echo $this ->query;
+			// }else {
+				// $this ->query = "ALTER TABLE {$this ->table} ADD CONSTRAINT {$constraint} FOREIGN KEY ({$field})
+				// 				REFERENCES {$tableForeign} ({$fieldForeign}) ON DELETE {$onDelete} ON UPDATE {$onUpdate};";
+				// echo $this ->query;
+			// }
+			// var_dump ($this ->query);
+		}
+		else
+		{
+			if (strlen($this ->queryForeign))
+			{
+				$this ->queryForeign .= ", CONSTRAINT $constraint FOREIGN KEY ($field) REFERENCES $tableForeign ($fieldForeign) ON DELETE {$onDelete} ON UPDATE {$onUpdate}";
+			}
+		}
 		return $this;
+	}
+	public function index($field)
+	{
+		if (strlen($this ->table) && $this ->alterTable)
+		{
+			$this ->query .= "ALTER TABLE {$this ->table} ADD INDEX ({$field});";
+			return $this;
+		}
 	}
 	private function obtenerTipoQuery()
 	{
@@ -599,14 +667,14 @@ class Query
 		elseif (stripos($this ->query, 'insert') !== false) {
 			$tipo = "guardar";
 		}
-		elseif (stripos($this ->query, 'update') !== false) {
+		elseif ($this ->alterTable == FALSE && stripos($this ->query, 'update') !== false) {
 			$tipo = "actualizar";
 		}
 		elseif (stripos($this ->query, 'create table') !== false) {
 			$tipo = "crearTabla";
 		}
-		else
-			$tipo = "enlazar";
+		elseif ($this ->alterTable)
+			$tipo = "alterarTabla";
 		return $tipo;
 	}
 	public function mensaje()

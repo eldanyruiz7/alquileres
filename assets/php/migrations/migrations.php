@@ -11,505 +11,338 @@ if( logueado($idSesion,$idUsuario,$mysqli) == false || $idSesion == false)
 }
 else
 {
-	function pa($arr)
-	{
-		echo $arr;
-	}
+
 	require ("../usuario.class.php");
 	require ("../query.class.php");
 	$usuario 	= new usuario($idUsuario,$mysqli);
 	$query 		= new Query();
-	echo $query->backup();
-// 	$query ->dropTable("bitacora_eventos");
-// 	$query 	->createTable("bitacora_eventos", TRUE)
-// 			->bigIncrements("id")
-// 			->int("idUsuario")
-// 			->dateTimeCurrent("fecha")
-// 			->varChar("ip",30)
-// 			->varChar("pantalla",100)
-// 			->varChar("descripcion",500)
-// 			->int("idSucursal")
-// 			->execute();
-// 	echo $query ->mensaje()."</br>";
-//
-// 	$query ->dropTable("cat_causasdecesos");
-// 	$query 	->createTable("cat_causasdecesos", TRUE)
-// 			->intIncrements("id")
-// 			->varChar("nombre",100)
-// 			->dateTimeCurrent("fechaCreacion")
-// 			->int("usuario")
-// 			->int("activo", FALSE, '1')
-// 			->execute();
-// 			echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_causasdecesos")
-// 			->insert(array( "nombre" => "Enfisema pulmonar",
-// 					 		"usuario" => 1), "si")
-// 			->execute();
-// 			echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_causasdecesos")
-// 			->insert(array( "nombre" => "Paro respiratorio",
-// 					 		"usuario" => 1), "si")
-// 			->execute();
-// 			echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_causasdecesos")
-// 			->insert(array( "nombre" => "Paro cardiaco",
-// 					 		"usuario" => 1), "si")
-// 			->execute();
-// 			echo $query ->mensaje()."</br>";
-//
-// 	// CAT DIFUNTOS
-//
-// 	// CAT ESTADOS
-//
-// 	$query ->dropTable("cat_formas_pago");
-// 	$query 	->createTable("cat_formas_pago", TRUE)
-// 			->intIncrements("id")
-// 			->varChar("c_FormaPago",5)
-// 			->varChar("nombre",50)
-// 			->int("bancarizado")
-// 			->int("activo", FALSE, '1')
-// 			->execute();
-// 			echo $query ->mensaje()."</br>";
-//
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "01",
-// 							"nombre" 		=> "Efectivo",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "02",
-// 							"nombre" 		=> "Cheque",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "03",
-// 							"nombre" 		=> "Transferencia",
-// 							"bancarizado" 	=> 1), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "04",
-// 							"nombre" 		=> "Tarjeta de Crédito",
-// 							"bancarizado" 	=> 1), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "05",
-// 							"nombre" 		=> "Monedero electrónico",
-// 							"bancarizado" 	=> 1), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "06",
-// 							"nombre" 		=> "Dinero electrónico",
-// 							"bancarizado" 	=> 1), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "08",
-// 							"nombre" 		=> "Vales de despensa",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "12",
-// 							"nombre" 		=> "Dación en pago",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "13",
-// 							"nombre" 		=> "Pago por subrogación",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "14",
-// 							"nombre" 		=> "Pago por consignación",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "15",
-// 							"nombre" 		=> "Condonación",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "17",
-// 							"nombre" 		=> "Compensación",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "23",
-// 							"nombre" 		=> "Novación",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "24",
-// 							"nombre" 		=> "Confusión",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "25",
-// 							"nombre" 		=> "Remisión de deuda",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "26",
-// 							"nombre" 		=> "Prescripción o caducidad",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "27",
-// 							"nombre" 		=> "A satisfacción del acreedor",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "28",
-// 							"nombre" 		=> "Tarjeta de débito",
-// 							"bancarizado" 	=> 1), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "29",
-// 							"nombre" 		=> "Tarjeta de servicios",
-// 							"bancarizado" 	=> 1), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "30",
-// 							"nombre" 		=> "Aplicación de anticipos",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_formas_pago")
-// 			->insert(array( "c_FormaPago" 	=> "99",
-// 							"nombre" 		=> "Por definir",
-// 							"bancarizado" 	=> 0), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-//
-// /// CATÁLOGO LUGARES DE DEFUNCIÓN ///
-//
-// 	$query ->dropTable("cat_lugares_defuncion");
-// 	$query 	->createTable("cat_lugares_defuncion", TRUE)
-// 			->intIncrements("id")
-// 			->varChar("nombre",30)
-// 			->varChar("domicilio",300)
-// 			->dateTimeCurrent("fechaCreacion")
-// 			->int("usuario")
-// 			->int("activo", FALSE, '1')
-// 			->execute();
-// 			echo $query ->mensaje()."</br>";
-//
-// 	$query 	->table("cat_lugares_defuncion")
-// 			->insert(array( "nombre" 		=> "Clínica 10 Manzanillo",
-// 							"domicilio" 	=> "Eulogia Serratos 6, Hospital IMSS, Manzanillo, Col.",
-// 							"usuario" 		=> 1), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_lugares_defuncion")
-// 			->insert(array( "nombre" 		=> "Hospital civil Manzanillo",
-// 							"domicilio" 	=> "Av Elías Zamora Verduzco S/N, Nuevo Salahua, 28869 Manzanillo, Col.",
-// 							"usuario" 		=> 1), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-// 	$query 	->table("cat_lugares_defuncion")
-// 			->insert(array( "nombre" 		=> "Hospital Echauri Manzanillo",
-// 							"domicilio" 	=> "Blvd. Miguel de la Madrid 1215, Playa Azul Salagua, 28869 Manzanillo, Col.",
-// 							"usuario" 		=> 1), "ssi")->execute();
-// 							echo $query ->mensaje()."</br>";
-//
-// 	/// CATÁLOGO MÉTODOS DE PAGO ///
-//
-// 	$query ->dropTable("cat_metodos_pago");
-// 	$query 	->createTable("cat_metodos_pago", TRUE)
-// 			->intIncrements("id")
-// 			->varChar("c_MetodoPago",10)
-// 			->varChar("nombre",100)
-// 			->int("activo", FALSE, '1')
-// 			->execute();
-// 			echo $query ->mensaje()."</br>";
-//
-// 	$query 	->table("cat_metodos_pago")
-// 			->insert(array( "c_MetodoPago" 	=> "PUE",
-// 							"nombre" 	=> "Pago en una sola exhibición"), "ss")->execute();
-// 							echo $query ->mensaje()."</br>";
-//
-// 	/// CATÁLOGO MOTIVOS DE CANCELACIÓN ///
-//
-// 	$query ->dropTable("cat_motivosCancelacion");
-// 	$query 	->createTable("cat_motivosCancelacion", TRUE)
-// 			->intIncrements("id")
-// 			->varChar("nombre",50)
-// 			->dateTimeCurrent("fechaCreacion")
-// 			->int("idUsuario")
-// 			->int("activo", FALSE, '1')
-// 			->execute();
-// 			echo $query ->mensaje()."</br>";
+	// echo $query->backup();
+	$query ->dropTable("bitacora_eventos", 0);
+	$query 	->createTable("bitacora_eventos", TRUE)
+			->bigIncrements("id")
+			->bigInt("idUsuario")
+			->dateTimeCurrent("fecha")
+			->varChar("ip", 30)
+			->varChar("pantalla", 100)
+			->varChar("descripcion", 500)
+			->execute(TRUE);
+
+	$query	->dropTable("tiposUsuarios", 0);
+	$query	->createTable("tiposUsuarios", TRUE)
+			->intIncrements("idTipoUsuario")
+			->varChar("nombre", 15)
+			->dateTimeCurrent("fechaCreacion")
+			->int("activo", FALSE, 1)
+			->execute(TRUE);
+
+	$query	->dropTable("cat_usuarios", 0);
+	$query	->createTable("cat_usuarios", TRUE)
+			->bigIncrements("idUsuario")
+			->varChar("nombre", 200)
+			->varChar("nickName", 30)
+			->varChar("cntrsn", 100)
+			->varChar("email", 40, TRUE)
+			->int("tipo", FALSE, 1)
+			->dateTimeCurrent("fechaCreacion")
+			->int("activo", FALSE, 1)
+			->execute(TRUE);
+
+	$query	->dropTable("cat_estados", 0);
+	$query	->createTable("cat_estados", TRUE)
+			->intIncrements("idEstado")
+			->varChar("nombre", 50)
+			->int("activo", FALSE, 1)
+			->execute(TRUE);
+
+	$query	->dropTable("cat_titulares", 0);
+	$query	->createTable("cat_titulares", TRUE)
+			->bigIncrements("idTitular")
+			->varChar("nombre", 50)
+			->varChar("apellidoPaterno", 50)
+			->varChar("apellidoMaterno", 50, TRUE)
+			->varChar("sexo",1)
+			->int("idEstadoNacimiento")
+			->bigInt("idUsuario")
+			->bigInt("idUsuarioCancelacion", TRUE)
+			->dateTimeCurrent("fechaCreacion")
+			->int("activo", FALSE, 1)
+			->execute(TRUE);
+
+	$query	->dropTable("contratos", 0);
+	$query	->createTable("contratos", TRUE)
+			->bigIncrements("idContrato")
+			->dateTime("fechaInicio")
+			->int("mesesDuracion")
+			->int("idInmueble")
+			->decimal("montoRenta")
+			->decimal("montoDeposito")
+			->decimal("tasaInteresMoratorio")
+			->text("textoContrato")
+			->int("diasGraciaAtraso", FALSE, 0)
+			->int("bDeposito")
+			->int("activo", FALSE, 1)
+			->dateTimeCurrent("fechaCreacion")
+			->bigInt("idUsuario")
+			->bigInt("idUsuarioCancelacion", TRUE)
+			->execute(TRUE);
+
+	$query	->dropTable("inmuebles", 0);
+	$query	->createTable("inmuebles", TRUE)
+			->intIncrements("idInmueble")
+			->varChar("numero", 50)
+			->varChar("numeroCorto", 10)
+			->int("idTipoInmueble")
+			->bigInt("idUsuario")
+			->bigInt("idUsuarioCancelacion", TRUE)
+			->int("activo", FALSE, 1)
+			->dateTimeCurrent("fechaCreacion")
+			->execute(TRUE);
+
+	$query	->dropTable("tiposInmuebles", 0);
+	$query	->createTable("tiposInmuebles", TRUE)
+			->intIncrements("idTipoInmueble")
+			->varChar("nombre", 50)
+			->int("activo", FALSE, 1)
+			->execute(TRUE);
+
+	$query	->dropTable("pagos", 0);
+	$query	->createTable("pagos", TRUE)
+			->bigIncrements("idPago")
+			->bigInt("idContrato")
+			->int("numeroPago")
+			->int("idTipoPago")
+			->dateTime("fechaPago", TRUE)
+			->varChar("referenciaPago", 200, TRUE)
+			->int("diasAtrasoMoratorio", FALSE, 0)
+			->decimal("tasaInteresMoratorio")
+			->decimal("monto")
+			->decimal("montoAtraso")
+			->bigInt("idUsuario")
+			->bigInt("idUsuarioCancelacion", TRUE)
+			->int("activo", FALSE, 1)
+			->dateTimeCurrent("fechaCreacion")
+			->execute(TRUE);
+
+	$query	->dropTable("tiposPagos", 0);
+	$query	->createTable("tiposPagos", TRUE)
+			->intIncrements("idTipoPago")
+			->varChar("nombre", 50)
+			->int("activo", FALSE, 1)
+			->execute(TRUE);
+
+	$query	->dropTable("gastos", 0);
+	$query	->createTable("gastos", TRUE)
+			->bigIncrements("idGasto")
+			->int("idTipoGasto")
+			->int("idInmueble", TRUE)
+			->decimal("monto")
+			->varChar("observaciones", 200, TRUE)
+			->dateTime("fechaGasto")
+			->int("activo", FALSE, 1)
+			->dateTimeCurrent("fechaCreacion")
+			->bigInt("idUsuario")
+			->bigInt("idUsuarioCancelacion", TRUE)
+			->execute(TRUE);
+
+	$query	->dropTable("tiposGastos", 0);
+	$query	->createTable("tiposGastos", TRUE)
+			->intIncrements("idTipoGasto")
+			->varChar("nombre", 50)
+			->bigInt("idUsuario")
+			->bigInt("idUsuarioCancelacion", TRUE)
+			->int("activo", FALSE, 1)
+			->dateTimeCurrent("fechaCreacion")
+			->execute(TRUE);
+
+	$query	->dropTable("sesionescontrol", 0);
+	$query	->createTable("sesionescontrol", TRUE)
+			->bigIncrements("id")
+			->dateTime("timestampentrada")
+			->dateTime("timestampsalida", TRUE)
+			->int("estado", FALSE, 1)
+			->bigInt("usuario")
+			->int("activo", FALSE, 1)
+			->execute(TRUE);
+
+	/*** INDEX Y FOREIGN KEYS */
+
+	$query	->alterTable("bitacora_eventos")
+			->index("idUsuario")
+			->index("fecha")
+			->execute(TRUE);
+	$query	->alterTable("bitacora_eventos")
+			->foreignKey("FK_bitacora_eventos_cat_usuarios00", "idUsuario", "cat_usuarios", "idUsuario")
+			->execute(TRUE);
+
+	$query	->alterTable("tiposUsuarios")
+			->index("idTipoUsuario")
+			->index("nombre")
+			->index("activo")
+			->execute(TRUE);
+
+	$query	->alterTable("cat_usuarios")
+			->index("idUsuario")
+			->index("nombre")
+			->index("nickName")
+			->index("tipo")
+			->index("activo")
+			->execute(TRUE);
+	$query	->alterTable("cat_usuarios")
+			->foreignKey("FK_cat_usuarios_TiposUsuarios00", "tipo", "tiposUsuarios", "idTipoUsuario")
+			->execute(TRUE);
+
+	$query	->alterTable("cat_titulares")
+			->index("idTitular")
+			->index("nombre")
+			->index("apellidoPaterno")
+			->index("apellidoMaterno")
+			->index("idEstadoNacimiento")
+			->index("activo")
+			->index("idUsuario")
+			->index("idUsuarioCancelacion")
+			->execute(TRUE);
+	$query	->alterTable("cat_titulares")
+			->foreignKey("FK_cat_titulares_cat_usuarios00", "idUsuario", "cat_usuarios", "idUsuario")
+			->foreignKey("FK_cat_titulares_cat_usuarios01", "idUsuarioCancelacion", "cat_usuarios", "idUsuario")
+			->foreignKey("FK_cat_titulares_cat_estados00", "idEstadoNacimiento", "cat_estados", "idEstado")
+			->execute(TRUE);
+
+	$query	->alterTable("contratos")
+			->index("idContrato")
+			->index("fechaInicio")
+			->index("mesesDuracion")
+			->index("idInmueble")
+			->index("activo")
+			->index("fechaCreacion")
+			->index("idUsuario")
+			->index("idUsuarioCancelacion")
+			->execute(TRUE);
+	$query	->alterTable("contratos")
+			->foreignKey("FK_contratos_inmuebles00", "idInmueble", "inmuebles", "idInmueble")
+			->foreignKey("FK_contratos_cat_usuarios00", "idUsuario", "cat_usuarios", "idUsuario")
+			->foreignKey("FK_contratos_cat_usuarios01", "idUsuarioCancelacion", "cat_usuarios", "idUsuario")
+			->execute(TRUE);
+
+	$query	->alterTable("inmuebles")
+			->index("idInmueble")
+			->index("numero")
+			->index("numeroCorto")
+			->index("idTipoInmueble")
+			->index("activo")
+			->index("idUsuario")
+			->index("idUsuarioCancelacion")
+			->execute(TRUE);
+	$query	->alterTable("inmuebles")
+			->foreignKey("FK_inmuebles_tiposInmuebles00", "idTipoInmueble", "tiposInmuebles", "idTipoInmueble")
+			->foreignKey("FK_inmuebles_cat_usuarios00", "idUsuario", "cat_usuarios", "idUsuario")
+			->foreignKey("FK_inmuebles_cat_usuarios01", "idUsuarioCancelacion", "cat_usuarios", "idUsuario")
+			->execute(TRUE);
+
+	$query	->alterTable("tiposInmuebles")
+			->index("idTipoInmueble")
+			->index("nombre")
+			->index("activo")
+			->execute(TRUE);
+
+	$query	->alterTable("pagos")
+			->index("idPago")
+			->index("idContrato")
+			->index("numeroPago")
+			->index("idTipoPago")
+			->index("fechaPago")
+			->index("referenciaPago")
+			->index("diasAtrasoMoratorio")
+			->index("idUsuario")
+			->index("idUsuarioCancelacion")
+			->index("activo")
+			->execute(TRUE);
+	$query	->alterTable("pagos")
+			->foreignKey("FK_pagos_contratos00", "idContrato", "contratos", "idContrato")
+			->foreignKey("FK_pagos_tiposPagos00", "idTipoPago", "tiposPagos", "idTipoPago")
+			->foreignKey("FK_pagos_cat_usuarios00", "idUsuario", "cat_usuarios", "idUsuario")
+			->foreignKey("FK_pagos_cat_usuarios01", "idUsuarioCancelacion", "cat_usuarios", "idUsuario")
+			->execute(TRUE);
+
+	$query	->alterTable("tiposPagos")
+			->index("idTipoPago")
+			->index("nombre")
+			->index("activo")
+			->execute(TRUE);
+
+	$query	->alterTable("gastos")
+			->index("idGasto")
+			->index("idTipoGasto")
+			->index("idInmueble")
+			->index("monto")
+			->index("fechaGasto")
+			->index("activo")
+			->index("idUsuario")
+			->index("idUsuarioCancelacion")
+			->execute(TRUE);
+	$query	->alterTable("gastos")
+			->foreignKey("FK_gastos_tiposGastos00", "idTipoGasto", "tiposGastos", "idTipoGasto")
+			->foreignKey("FK_gastos_Inmuebles00", "idInmueble", "inmuebles", "idInmueble")
+			->foreignKey("FK_gastos_cat_usuarios00", "idUsuario", "cat_usuarios", "idUsuario")
+			->foreignKey("FK_gastos_cat_usuarios01", "idUsuarioCancelacion", "cat_usuarios", "idUsuario")
+			->execute(TRUE);
+
+	$query	->alterTable("tiposGastos")
+			->index("idTipoGasto")
+			->index("nombre")
+			->index("activo")
+			->index("idUsuario")
+			->index("idUsuarioCancelacion")
+			->index("fechaCreacion")
+			->execute(TRUE);
+
+	$query	->alterTable("sesionescontrol")
+			->index("id")
+			->index("timestampentrada")
+			->index("timestampsalida")
+			->index("estado")
+			->index("usuario")
+			->index("activo")
+			->execute(TRUE);
+	$query	->alterTable("sesionescontrol")
+			->foreignKey("FK_sesionescontrol_cat_usuarios00", "usuario", "cat_usuarios", "idUsuario")
+			->execute(TRUE);
 
 
-	// $query 	->table("cat_motivosCancelacion")
-	// 		->insert(array( "nombre" 	=> "Problemas económicos",
-	// 						"idUsuario" 	=> 1), "si")->execute();
-	// 						echo $query ->mensaje()."</br>";
-	// $query 	->table("cat_motivosCancelacion")
-	// 		->insert(array( "nombre" 	=> "Desempleo",
-	// 						"idUsuario" 	=> 1), "si")->execute();
-	// 						echo $query ->mensaje()."</br>";
-	// $query 	->table("cat_motivosCancelacion")
-	// 		->insert(array( "nombre" 	=> "No localizable",
-	// 						"idUsuario" 	=> 1), "si")->execute();
-	// 						echo $query ->mensaje()."</br>";
-	// $query 	->table("cat_motivosCancelacion")
-	// 		->insert(array( "nombre" 	=> "Pérdida de interés",
-	// 						"idUsuario" 	=> 1), "si")->execute();
-	// 						echo $query ->mensaje()."</br>";
-	// $query 	->table("cat_motivosCancelacion")
-	// 		->insert(array( "nombre" 	=> "Transferencia de contrato",
-	// 						"idUsuario" 	=> 1), "si")->execute();
-	// 						echo $query ->mensaje()."</br>";
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//
-	//////////////////////////////////////////////// cat_departamentos /////////////////////////////////////////////////////////
-		// $query 	->dropTable("cat_departamentos");
-		// $query ->createTable("cat_departamentos", TRUE)
-		// 		->intIncrements("id")
-		// 		->varChar("nombre",50)
-		// 		->int("idUsuario")
-		// 		->int("activo", FALSE, '1')
-		// 		->execute();
-		// 		echo $query ->mensaje()."</br>";
-		//
-		// $query ->table("cat_departamentos")->insert(array("nombre" 	=> "Administrativo",
-		// 												"idUsuario" => 1), "si")->execute();
-		// 												echo $query ->mensaje()."</br>";
-		//
-		// $query ->table("cat_departamentos")->insert(array("nombre" 	=> "Ventas",
-		// 												"idUsuario" => 1), "si")->execute();
-		// 												echo $query ->mensaje()."</br>";
-		//
-		// $query ->table("cat_departamentos")->insert(array("nombre" 	=> "Cobranza",
-		// 												"idUsuario" => 1), "si")->execute();
-		// 												echo $query ->mensaje()."</br>";
+/*** INSERTS INICIALIZACIÓN */
 
-/**
- * MÓDULO DE NÓMINAS
- */
+	$query 	->table("tiposUsuarios")
+			->insert(array( "nombre" => "Administrador"), "s")
+			->execute(TRUE);
+	$query 	->table("tiposUsuarios")
+			->insert(array( "nombre" => "Normal"), "s")
+			->execute(TRUE);
 
-//////////////////////////////////////////////// tipos_periodos_nominas /////////////////////////////////////////////////////////
-// 			$query 	->dropTable("tipos_periodos_nominas", 0);
-// 			$query ->createTable("tipos_periodos_nominas", TRUE)
-// 					->intIncrements("id")
-// 					->varChar("nombre",50)
-// 					// ->int("cuantosDias")
-// 					->int("idUsuario")
-// 					->int("activo", FALSE, '1')
-// 					->execute();
-// 					echo $query ->mensaje()."</br>";
-//
-// 			$query ->table("tipos_periodos_nominas")->insert(array( "nombre" 	=> "Semanal",
-// 																	"idUsuario" => 1), "si")->execute();
-// 																	echo $query ->mensaje()."</br>";
-//
-// 			$query ->table("tipos_periodos_nominas")->insert(array( "nombre" 	=> "Quincenal",
-// 																	"idUsuario" => 1), "si")->execute();
-// 																	echo $query ->mensaje()."</br>";
-//
-// 			$query ->table("tipos_periodos_nominas")->insert(array( "nombre" 	=> "Mensual",
-// 																	"idUsuario" => 1), "si")->execute();
-// 																	echo $query ->mensaje()."</br>";
-//
-// 		//////////////////////////////////////////////// periodos_nomina /////////////////////////////////////////////////////////
-// 			$query 	->dropTable("periodos_nomina", 0);
-// 			$query ->createTable("periodos_nomina", TRUE)
-// 					->intIncrements("id")
-// 					->varChar("nombre",50)
-// 					->int("idUsuario")
-// 					->int("activo", FALSE, '1')
-// 					->execute();
-// 					echo $query ->mensaje()."</br>";
-//
-// 			$query ->table("periodos_nomina")->insert(array("nombre" 	=> "Semanal",
-// 															"idUsuario" => 1), "si")->execute();
-// 															echo $query ->mensaje()."</br>";
-//
-// 			$query ->table("periodos_nomina")->insert(array("nombre" 	=> "Quincenal",
-// 															"idUsuario" => 1), "si")->execute();
-// 															echo $query ->mensaje()."</br>";
-//
-// 			$query ->table("periodos_nomina")->insert(array("nombre" 	=> "Mensual",
-// 															"idUsuario" => 1), "si")->execute();
-// 															echo $query ->mensaje()."</br>";
-//
-//
-// /////////////////////////////////////////////////// cat_nominas /////////////////////////////////////////////////////////
-// 			$query 	->dropTable("cat_periodos_nominas",0);
-// 			$query 	->createTable("cat_periodos_nominas", TRUE)
-// 					->bigIncrements("id")
-// 					->int("tipoPeriodo", FALSE, "1")
-// 					->date("fechaInicio")
-// 					->date("fechaFin")
-// 					->dateTimeCurrent("fechaCreacion")
-// 					->int("idUsuarioCreo")
-// 					->int("idSucursal")
-// 					->int("activo", FALSE, '1')
-// 					->foreignKey("fk_tipo_periodo_nomina", "tipoPeriodo", "periodos_nomina", "id")
-// 					->execute();
-// 					echo $query ->mensaje()."</br>";
-// 			// $query ->table("cat_periodos_nominas")->insert(array("fechaInicio" => "2019-11-14", "fechaFin" => "2019-11-14", "idUsuarioCreo" => 1, "idSucursal" => 1 ), "ssii")->execute();
-// 			// $query ->table("cat_periodos_nominas")->insert(array("fechaInicio" => "2019-11-15", "fechaFin" => "2019-11-15", "idUsuarioCreo" => 1, "idSucursal" => 1 ), "ssii")->execute();
-// 			// $query ->table("cat_periodos_nominas")->insert(array("fechaInicio" => "2019-11-16", "fechaFin" => "2019-11-16", "idUsuarioCreo" => 1, "idSucursal" => 1 ), "ssii")->execute();
-//
-//
-// 			$query ->dropTable("cat_nominas", 0);
-// 			$query ->createTable("cat_nominas", TRUE)
-// 					->bigIncrements("id")
-// 					->bigInt("idPeriodo")
-// 					->int("idUsuario")
-// 					->int("activo", FALSE, '1')
-// 					->foreignKey("fk_id_periodo_nomina", "idPeriodo", "cat_periodos_nominas", "id")
-// 					->execute();
-// 					echo $query ->mensaje()."</br>";
-//
-//
-// // //////////////////////////////////////////////// cat_conceptos_nominas /////////////////////////////////////////////////////////
-// 			$query ->dropTable("cat_conceptos_nominas", 0);
-// 			$query ->createTable("cat_conceptos_nominas", TRUE)
-// 					->bigIncrements("id")
-// 					->varChar("nombreConcepto", 50)
-// 					->int("tipo", FALSE, "1") //1 = Percepcion 2 = Deducción
-// 					->dateTimeCurrent("fechaCreacion")
-// 					->int("idUsuario")
-// 					->int("idSucursal")
-// 					->int("activo", FALSE, '1')
-// 					->execute();
-// 					echo $query ->mensaje()."</br>";
-//
-// 			$query ->table("cat_conceptos_nominas")->insert(array("nombreConcepto" => "Comisión ventas",
-// 																 "idUsuario" => 1,
-// 															 	 "idSucursal" => 1), "sii")->execute();
-// 																 echo $query ->mensaje()."</br>";
-// 			$query ->table("cat_conceptos_nominas")->insert(array("nombreConcepto" => "Comisión cobranza",
-// 		 														 "idUsuario" => 1,
-// 		 													 	 "idSucursal" => 1), "sii")->execute();
-// 																 echo $query ->mensaje()."</br>";
-// 			$query ->table("cat_conceptos_nominas")->insert(array("nombreConcepto" => "Otros",
-// 																 "idUsuario" => 1,
-// 															 	 "idSucursal" => 1), "sii")->execute();
-// 																 echo $query ->mensaje()."</br>";
-//
-// /////////////////////////////////////////// detalle_nomina ////////////////////////////////////////////////////
-// 			$query 	->dropTable("tipos_detalle_nomina", 0); //Percepción, deducción
-// 			$query	->createTable("tipos_detalle_nomina", TRUE)
-// 					->intIncrements("id")
-// 					->varChar("nombre", 20)
-// 					->int("activo", FALSE, '1')
-// 					->execute();
-// 					echo $query ->mensaje()."</br>";
-//
-// 			$query ->table("tipos_detalle_nomina")->insert(array("nombre" => "Percepción"), "s")->execute();
-// 			$query ->table("tipos_detalle_nomina")->insert(array("nombre" => "Deducción"), "s")->execute();
-//
-// 			$query	->dropTable("detalle_nomina", 0);
-// 			$query 	->createTable("detalle_nomina", TRUE)
-// 					->bigIncrements("id")
-// 					->bigInt("idNomina")
-// 					->bigInt("idConcepto")
-// 					->int("tipo", FALSE, "1")
-// 					->varChar("nombreConcepto", 100)
-// 					->int("cantidad")
-// 					->decimal("monto")
-// 					->dateTimeCurrent("fechaCreacion")
-// 					->int("idUsuario")
-// 					->int("idSucursal")
-// 					->int("pagado", FALSE, '0')
-// 					->int("activo", FALSE, '1')
-// 					->foreignKey("fk_id_nomina", "idNomina", "cat_nominas", "id")
-// 					->foreignKey("fk_id_cat_concepto_nomina", "idConcepto", "cat_conceptos_nominas", "id")
-// 					->foreignKey("fk_tipo_detalle_nomina", "tipo", "tipos_detalle_nomina", "id")
-// 					->execute();
-// 					echo $query ->mensaje()."</br>";
-//
-//
-// 	// Limpiar nomina //
-// 	$query->table("detalle_pagos_contratos")->update(array("idNominaVenta" => 0), "i")->execute();
-// 	$query->table("detalle_pagos_contratos")->update(array("idNominaCobranza" => 0), "i")->execute();
-// 	$query->table("contratos")->update(array("idNomina" => 0), "i")->execute();
-//
-// // //////////////////////////////////////////////// tipos_usuarios /////////////////////////////////////////////////////////
-// 	$query 	->dropTable("tipos_usuarios");
-// 	$query ->createTable("tipos_usuarios", TRUE)
-// 			->intIncrements("id")
-// 			->varChar("nombre",50)
-// 			->int("idUsuario")
-// 			->int("activo", FALSE, '1')
-// 			->execute();
-// 			echo $query ->mensaje()."</br>";
-//
-// 	$query ->table("tipos_usuarios")->insert(array("nombre" 	=> "Administrador",
-// 													"idUsuario" => 1), "si")->execute();
-// 													echo $query ->mensaje()."</br>";
-//
-// 	$query ->table("tipos_usuarios")->insert(array("nombre" 	=> "Secretario",
-// 													"idUsuario" => 1), "si")->execute();
-// 													echo $query ->mensaje()."</br>";
-//
-// 	$query ->table("tipos_usuarios")->insert(array("nombre" 	=> "Vendedor",
-// 													"idUsuario" => 1), "si")->execute();
-// 													echo $query ->mensaje()."</br>";
-//
-// 	$query ->table("tipos_usuarios")->insert(array("nombre" 	=> "Cobrador",
-// 													"idUsuario" => 1), "si")->execute();
-// 													echo $query ->mensaje()."</br>";
-//
-//
-//
-//
-//
-// /**
-//  * CATÁLOGO FRECUENCIAS DE PAGO
-//  *
-//  */
-//
-// // $query	->dropTable("cat_frecuencias_pago", 0);
-// // $query 	->createTable("cat_frecuencias_pago", TRUE)
-// // 		->bigIncrements("id")
-// // 		->varChar("nombre", 20)
-// // 		->varChar("clase", 200)
-// // 		->int("idUsuario")
-// // 		->int("idSucursal")
-// // 		->int("activo", FALSE, '1')
-// // 		->execute();
-// // 		echo $query ->mensaje()."</br>";
-// // $query ->table("cat_frecuencias_pago")->insert(array("nombre" => "Semanal",
-// // 													 "clase" => '<span class="label label-success label-white middle">Semanal</span>',
-// // 													 "idUsuario" => 1,
-// // 												 	 "idSucursal" => 1), "ssii")->execute();
-// // 													 echo $query ->mensaje()."</br>";
-// // $query ->table("cat_frecuencias_pago")->insert(array("nombre" => "Quincenal",
-// // 													 "clase" => '<span class="label label-info label-white middle">Quincenal</span>',
-// // 													 "idUsuario" => 1,
-// // 												 	 "idSucursal" => 1), "ssii")->execute();
-// // 													 echo $query ->mensaje()."</br>";
-// // $query ->table("cat_frecuencias_pago")->insert(array("nombre" => "Mensual",
-// // 													 "clase" => '<span class="label label-purple label-white middle">Mensual</span>',
-// // 													 "idUsuario" => 1,
-// // 												 	 "idSucursal" => 1), "ssii")->execute();
-// // 													 echo $query ->mensaje()."</br>";
-//
-//
-//
-//
-													 }
+	$query 	->table("tiposInmuebles")
+			->insert(array( "nombre" => "Residencial"), "s")
+			->execute(TRUE);
+	$query 	->table("tiposInmuebles")
+			->insert(array( "nombre" => "Comercial"), "s")
+			->execute(TRUE);
+
+	$query 	->table("tiposPagos")
+			->insert(array( "nombre" => "Renta"), "s")
+			->execute(TRUE);
+	$query 	->table("tiposPagos")
+			->insert(array( "nombre" => "Depósito"), "s")
+			->execute(TRUE);
+
+	$query 	->table("cat_usuarios")
+			->insert(array( "nombre" 	=> "root",
+							"nickName"	=> "system",
+							"cntrsn"	=> '$2y$15$HkVCwVWLCdErC/pmqhXHwepVjIpP6TevqpMKosqRhzv5oOBG/dpvq',
+							"email"		=> "gamb2006@gmail.com"), "ssss")->execute(TRUE);
+
+	$query 	->table("tiposGastos")
+			->insert(array(	"nombre"	=> "Predial",
+							"idUsuario"	=> 1), "si")->execute(TRUE);
+	$query 	->table("tiposGastos")
+			->insert(array(	"nombre"	=> "Energía Eléctrica",
+							"idUsuario"	=> 1), "si")->execute(TRUE);
+
+
+ }
